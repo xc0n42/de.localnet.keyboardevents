@@ -1,0 +1,19 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 1.0.0
+apiversion: 2
+architectures: arm64 x86_64
+mac: true
+description: de.localnet.keyboardevents
+author: Your Name
+license: Specify your license
+copyright: Copyright (c) 2022 by Your Company
+
+# these should not be edited
+name: de.localnet.keyboardevents
+moduleid: de.localnet.keyboardevents
+guid: 79ad6670-df80-4019-ab7a-26893d5c7f9f
+platform: iphone
+minsdk: 10.1.1.GA
