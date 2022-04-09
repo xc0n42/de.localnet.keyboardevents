@@ -5,11 +5,11 @@
 version: 1.0.0
 apiversion: 2
 architectures: arm64 x86_64
-mac: true
+mac: false
 description: de.localnet.keyboardevents
-author: Your Name
+author: Marko Fritzsche
 license: Specify your license
-copyright: Copyright (c) 2022 by Your Company
+copyright: Copyright (c) 2011 Funkbit AS, 2022 Marko Fritzsche, 
 
 # these should not be edited
 name: de.localnet.keyboardevents

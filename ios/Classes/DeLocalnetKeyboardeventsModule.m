@@ -30,32 +30,55 @@
 
 - (void)startup
 {
-  // This method is called when the module is first loaded
-  // You *must* call the superclass
-  [super startup];
-  DebugLog(@"[DEBUG] %@ loaded", self);
+	// This method is called when the module is first loaded
+	// You *must* call the superclass
+	[super startup];
+	
+	// Register for keyboard notifications
+	NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+	[nc addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[nc addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+	
+	DebugLog(@"[DEBUG] %@ loaded", self);
 }
 
-#pragma Public APIs
-
-- (NSString *)example:(id)args
+-(void)shutdown:(id)sender
 {
-  // Example method. 
-  // Call with "MyModule.example(args)"
-  return @"hello world";
+	// This method is called when the module is being unloaded
+	// typically this is during shutdown. make sure you don't do too
+	// much processing here or the app will be quit forceably
+	
+	// Unregister keyboard notifications
+	NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+	[nc removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+	[nc removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+	
+	// you *must* call the superclass
+	[super shutdown:sender];
 }
 
-- (NSString *)exampleProp
+
+#pragma mark Event handlers
+
+- (void)keyboardWillShow:(NSNotification *)aNotification
 {
-  // Example property getter. 
-  // Call with "MyModule.exampleProp" or "MyModule.getExampleProp()"
-  return @"Titanium rocks!";
+	NSDictionary* userInfo = [aNotification userInfo];
+	
+	// Get height of keyboard
+	CGRect keyboardEndFrame;
+	[[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
+	NSNumber *keyboardHeight = [NSNumber numberWithFloat:keyboardEndFrame.size.height];
+	
+	// Event object
+	NSMutableDictionary *event = [NSMutableDictionary dictionary];
+	[event setValue:keyboardHeight forKey:@"keyboardHeight"];
+	
+	[self fireEvent:@"keyboardWillShow" withObject:event];
 }
 
-- (void)setExampleProp:(id)value
+- (void)keyboardWillHide:(NSNotification *)aNotification
 {
-  // Example property setter. 
-  // Call with "MyModule.exampleProp = 'newValue'" or "MyModule.setExampleProp('newValue')"
+	[self fireEvent:@"keyboardWillHide" withObject:nil];
 }
 
 @end
